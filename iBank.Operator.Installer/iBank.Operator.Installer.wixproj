@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <ProductVersion>3.10</ProductVersion>
+    <ProjectGuid>6fc6f16e-94bf-43b6-958a-23d64d70ebfe</ProjectGuid>
+    <SchemaVersion>2.0</SchemaVersion>
+    <OutputName>iBank.Operator-$(Platform) Installer</OutputName>
+    <OutputType>Package</OutputType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>Debug</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Components.wxs" />
+    <Compile Include="ComponentsGenerated.wxs" />
+    <Compile Include="Directories.wxs" />
+    <Compile Include="Product.wxs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Common.wxl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\iBank.Core\iBank.Core\iBank.Core.csproj">
+      <Name>iBank.Core</Name>
+      <Project>{afaaf3a3-6b58-4c0c-ab57-8d63e40dd0fd}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\iBank.Operator.Desktop\iBank.Operator.Desktop\iBank.Operator.Desktop.csproj">
+      <Name>iBank.Operator.Desktop</Name>
+      <Project>{7fa5f172-a6e7-4658-af39-13082355043b}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WixExtension Include="WixUtilExtension">
+      <HintPath>$(WixExtDir)\WixUtilExtension.dll</HintPath>
+      <Name>WixUtilExtension</Name>
+    </WixExtension>
+    <WixExtension Include="WixUIExtension">
+      <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
+    </WixExtension>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Assets" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\BackgroundLogo.png" />
+    <Content Include="Assets\eula-en-us.rtf" />
+    <Content Include="Assets\eula-ru-ru.rtf" />
+    <Content Include="Assets\TopBanner.png" />
+    <Content Include="Config.json" />
+  </ItemGroup>
+  <Import Project="$(WixTargetsPath)" Condition=" '$(WixTargetsPath)' != '' " />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets" Condition=" '$(WixTargetsPath)' == '' AND Exists('$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets') " />
+  <Target Name="EnsureWixToolsetInstalled" Condition=" '$(WixTargetsImported)' != 'true' ">
+    <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />
+  </Target>
+  <Target Name="BeforeBuild">
+    <Exec Command="rd /s /q ..\iBank.Operator.Desktop\bin\$(Configuration)\$(TargetFramework)\win-$(Platform)" />
+    <Exec Command="dotnet publish ..\iBank.Operator.Desktop\iBank.Operator.Desktop.csproj -f $(TargetFramework) -c $(Configuration) -r win-$(Platform)" />
+    <!--
+    Б У Д К О  П И Д О Р
+    У
+    Д
+    К
+    О
+    
+    П
+    И
+    Д
+    О
+    Р
+    -->
+    <!--
+    <GetAssemblyIdentity AssemblyFiles="..\iBank.Operator.Desktop\bin\$(Configuration)\$(TargetFramework)\win-$(Platform)\publish\iBank.Operator.Desktop.exe">
+      <Output TaskParameter="Assemblies" ItemName="AssemblyVersion" />
+    </GetAssemblyIdentity>
+    <PropertyGroup>
+      <DefineConstants>BuildVersion=%(AssemblyVersion.Version)</DefineConstants>
+    </PropertyGroup>
+    -->
+    <PropertyGroup>
+      <DefineConstants>BasePath=..\iBank.Operator.Desktop\bin\$(Configuration)\$(TargetFramework)\win-$(Platform)\publish</DefineConstants>
+    </PropertyGroup>
+    <HeatDirectory OutputFile="ComponentsGenerated.wxs" DirectoryRefId="INSTALLFOLDER" ComponentGroupName="PublishedComponents" SuppressCom="true" Directory="..\iBank.Operator.Desktop\bin\$(Configuration)\$(TargetFramework)\win-$(Platform)\publish" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.BasePath" />
+  </Target>
+  <Target Name="AfterBuild">
+    <!--
+    <GetAssemblyIdentity AssemblyFiles="..\iBank.Operator.Desktop\bin\$(Configuration)\$(TargetFramework)\win-$(Platform)\publish\iBank.Operator.Desktop.exe">
+      <Output TaskParameter="Assemblies" ItemName="AssemblyVersion" />
+    </GetAssemblyIdentity>
+    -->
+  </Target>
+</Project>

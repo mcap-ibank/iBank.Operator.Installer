@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Codepage="UTF-8" Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+  
+  <String Id="Localization">en-us</String>
+
+  <String Id="Company">Aragas</String>
+
+  <String Id="ProductNameFolder">iBank.Operator</String>
+
+  <String Id="ProductName_x86">iBank.Operator (32 bit)</String>
+  <String Id="ProductName_x64">iBank.Operator (64 bit)</String>
+
+  <String Id="Description">Nope</String>
+  <String Id="Keywords">Nope</String>
+  <String Id="Comments">Nope</String>
+
+  <String Id="DowngradeErrorMessage">A newer version of [ProductName] is already installed.</String>
+  
+  <String Id="Language">1033</String>
+
+</WixLocalization>

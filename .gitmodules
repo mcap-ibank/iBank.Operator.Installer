@@ -1,0 +1,6 @@
+[submodule "iBank.Operator.Desktop"]
+	path = iBank.Operator.Desktop
+	url = https://github.com/mcap-ibank/iBank.Operator.Desktop.git
+[submodule "iBank.Core"]
+	path = iBank.Core
+	url = https://github.com/mcap-ibank/iBank.Core.git
