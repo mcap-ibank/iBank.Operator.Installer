@@ -4,16 +4,11 @@
   <Fragment>
     <ComponentGroup Id="ProductComponents">
 
-      <ComponentRef Id="ConfigComponent"/>
       <ComponentRef Id="MainAppShortcut"/>
       
     </ComponentGroup>
 
     <DirectoryRef Id="INSTALLFOLDER" FileSource="$(var.iBank.Operator.Desktop.ProjectDir)\bin\$(var.Configuration)\$(var.TargetFramework)\win-$(var.Platform)\publish\">
-
-      <Component Id="ConfigComponent" Guid="{0CB92A28-A501-476C-9281-78C94253B66D}">
-        <File Id="ConfigFile" KeyPath="yes" Source="$(var.ProjectDir)\Config.json" />
-      </Component>
       
       <Component Id="MainAppShortcut" Guid="{0253C4B1-5914-4CCC-A276-F33BCE1411F8}">
         <Shortcut Id="MainAppShorcut"
